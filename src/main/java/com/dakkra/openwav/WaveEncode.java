@@ -1,5 +1,7 @@
 package com.dakkra.openwav;
 
+import com.dakkra.wavetableeditor.util.ArrayBuilder;
+
 import java.nio.ByteBuffer;
 
 public class WaveEncode {
@@ -26,25 +28,30 @@ public class WaveEncode {
      */
     public static byte[] generateData(short[] pcmData) {
         //Bytes for the whole encoded file
-        int indexOffset = 0;
-        byte data[] = new byte[(pcmData.length * 2) + DATA_START_OFFSET];
-        byte riffData[] = ByteBuffer.allocate(4).putInt(RIFF_CHUNK_ID).array();
-        for (int index = 0; index < riffData.length; index++)
-            data[index] = riffData[index];
-        indexOffset += 4;
-        //Ignore ChunkID and ChunkSize but account for the rest of the file
-        short chunkSize = (short) (data.length - 8);
-        chunkSize = convert16bitEndian(chunkSize);
-        byte cSizeData[] = ByteBuffer.allocate(2).putShort(chunkSize).array();
-        for (int index = 0; index < cSizeData.length; index++)
-            data[index + indexOffset] = cSizeData[index];
-        indexOffset += 2;
-        byte waveData[] = ByteBuffer.allocate(4).putInt(WAVE_FORMAT).array();
-        for (int index = 0; index < waveData.length; index++)
-            data[index + indexOffset] = waveData[index];
-        indexOffset += 4;
-        //TODO fmt chunk and data chunk
+        ArrayBuilder<Byte> dataBuilder = new ArrayBuilder<>(DATA_START_OFFSET + (pcmData.length * 2));
+        //"RIFF"
+        byte buffer[] = ByteBuffer.allocate(4).putInt(RIFF_CHUNK_ID).array();
+        writeBytesToArrayBuilder(dataBuilder, buffer);
+        //CHUNK SIZE
+        int chunkSize = (dataBuilder.getSize() - 8);
+        chunkSize = convert32bitEndian(chunkSize);
+        buffer = ByteBuffer.allocate(4).putInt(chunkSize).array();
+        writeBytesToArrayBuilder(dataBuilder, buffer);
+        //"WAVE"
+        buffer = ByteBuffer.allocate(4).putInt(WAVE_FORMAT).array();
+        writeBytesToArrayBuilder(dataBuilder, buffer);
+
+        //TODO FMT AND DATA CHUNKS
+
+        byte data[] = new byte[dataBuilder.getSize()];
+        for (int index = 0; index < data.length; index++)
+            data[index] = dataBuilder.get(index);
         return data;
+    }
+
+    private static void writeBytesToArrayBuilder(ArrayBuilder<Byte> builder, byte... bytes) {
+        for (byte b : bytes)
+            builder.add(b);
     }
 
     /**
