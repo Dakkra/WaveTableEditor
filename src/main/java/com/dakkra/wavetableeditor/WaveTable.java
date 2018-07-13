@@ -10,18 +10,19 @@ public class WaveTable {
      */
     public WaveTable() {
         samples = new short[SAMPLES_IN_WAVETABLE];
+        generateFlat();
     }
 
     /**
      * Fills this table with samples all equal to '0'
      */
     public void generateFlat() {
-        for (short sample : samples)
-            sample = (short) 0;
+        for (int index = 0; index < SAMPLES_IN_WAVETABLE; index++)
+            samples[index] = 0;
     }
 
     /**
-     * Generate samples and fill th is table to act as a sine
+     * Generate samples and fill this table to act as a sine
      */
     public void generateSine() {
         short magnitude = Short.MAX_VALUE;
