@@ -8,7 +8,7 @@ public class WaveTableEditor {
         System.out.println("Hello this is a test");
         System.out.println("Exporting test sample...");
         WaveTable wt = new WaveTable();
-        wt.generateSine();
+        wt.generateSine(1.0f);
         try {
             TableExporter.export(wt, new File("sample.wav"));
         } catch (IOException e) {

@@ -24,10 +24,10 @@ public class WaveTable {
     /**
      * Generate samples and fill this table to act as a sine
      */
-    public void generateSine() {
+    public void generateSine(float numCycles) {
         short magnitude = Short.MAX_VALUE;
         for (int index = 0; index < SAMPLES_IN_WAVETABLE; index++)
-            samples[index] = (short) Math.round(magnitude * Math.sin((index * Math.PI) / 1024));
+            samples[index] = (short) Math.round((magnitude * Math.sin((index * Math.PI * numCycles) / 1024)));
     }
 
     /**
