@@ -1,6 +1,6 @@
-package com.dakkra.wavetableeditor;
+package com.dakkra.wavetableeditor.io;
 
-import com.dakkra.wavetableeditor.io.WaveEncode;
+import com.dakkra.wavetableeditor.WaveTable;
 
 import java.io.*;
 
@@ -31,6 +31,25 @@ public class TableExporter {
         oStream.flush();
         oStream.close();
         System.out.println("Wrote to " + destinationFile.getAbsolutePath());
+    }
+
+    /**
+     * Similar to export, but does this on a spawned thread
+     * <p>
+     * Exports a wave table to the provided destination file
+     *
+     * @param waveTable       wave table to be exported
+     * @param destinationFile file to export the wave table to
+     */
+    public static void threadedExport(WaveTable waveTable, File destinationFile) {
+        Thread exportThread = new Thread(() -> {
+            try {
+                export(waveTable, destinationFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        exportThread.start();
     }
 
 }
