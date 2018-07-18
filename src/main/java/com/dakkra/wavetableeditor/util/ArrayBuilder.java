@@ -9,11 +9,13 @@ public class ArrayBuilder<E> {
     /**
      * Creates and array builder for the provided data type
      *
-     * @param size size of the backing array
+     * @param array array to pass in
      */
-    public ArrayBuilder(int size) {
-        SIZE = size;
+    public ArrayBuilder(E[] array) {
+        SIZE = array.length;
         index = 0;
+        this.array = array;
+        System.out.println("Size of array: " + SIZE);
     }
 
     /**
@@ -21,7 +23,7 @@ public class ArrayBuilder<E> {
      */
     public void add(E data) {
         if (isFull())
-            throw new IndexOutOfBoundsException("Cannot add another object to this array builder. Exceeding fixed size of " + SIZE);
+            throw new IndexOutOfBoundsException("Cannot add another object to this array builder. Exceeding fixed size of " + SIZE + " index is at " + index);
         array[index++] = data;
     }
 
@@ -43,7 +45,7 @@ public class ArrayBuilder<E> {
      * Determines if this array builder is full (meaning the backing array is full)
      */
     public boolean isFull() {
-        return (index >= (SIZE - 1));
+        return (index > (SIZE - 1));
     }
 
     /**

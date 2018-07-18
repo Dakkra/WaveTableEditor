@@ -15,7 +15,13 @@ public class WaveEncode {
     //16bit PCM
     private static final int SUBCHUNK1SIZE = 16;
     //Format = 1 for pcm
-    private static final int AUDIO_FORMAT = 1;
+    private static final short AUDIO_FORMAT = 1;
+    //Mono sample
+    private static final short NUM_CHANNELS = 1;
+    //Samplerate
+    private static final int SAMPLE_RATE = 44100;
+    //Bit depth
+    private static final short BIT_DEPTH = 16;
     //"data" in ascii
     private static final int SUBCHUNK2ID = 0x64617461;
     //Data should start at byte 44
@@ -28,7 +34,7 @@ public class WaveEncode {
      */
     public static byte[] generateData(short[] pcmData) {
         //Bytes for the whole encoded file
-        ArrayBuilder<Byte> dataBuilder = new ArrayBuilder<>(DATA_START_OFFSET + (pcmData.length * 2));
+        ArrayBuilder<Byte> dataBuilder = new ArrayBuilder<>(new Byte[DATA_START_OFFSET + (pcmData.length * 2)]);
         //"RIFF"
         byte buffer[] = ByteBuffer.allocate(4).putInt(RIFF_CHUNK_ID).array();
         writeBytesToArrayBuilder(dataBuilder, buffer);
@@ -40,9 +46,29 @@ public class WaveEncode {
         //"WAVE"
         buffer = ByteBuffer.allocate(4).putInt(WAVE_FORMAT).array();
         writeBytesToArrayBuilder(dataBuilder, buffer);
-
-        //TODO FMT AND DATA CHUNKS
-
+        //"FMT"
+        buffer = ByteBuffer.allocate(4).putInt(SUBCHUNK1ID).array();
+        writeBytesToArrayBuilder(dataBuilder, buffer);
+        buffer = ByteBuffer.allocate(4).putInt(convert32bitEndian(SUBCHUNK1SIZE)).array();
+        writeBytesToArrayBuilder(dataBuilder, buffer);
+        buffer = ByteBuffer.allocate(2).putShort(convert16bitEndian(AUDIO_FORMAT)).array();
+        writeBytesToArrayBuilder(dataBuilder, buffer);
+        buffer = ByteBuffer.allocate(2).putShort(convert16bitEndian(NUM_CHANNELS)).array();
+        writeBytesToArrayBuilder(dataBuilder, buffer);
+        buffer = ByteBuffer.allocate(4).putInt(convert32bitEndian(SAMPLE_RATE)).array();
+        writeBytesToArrayBuilder(dataBuilder, buffer);
+        buffer = ByteBuffer.allocate(4).putInt(convert32bitEndian(SAMPLE_RATE * BIT_DEPTH / 8)).array();
+        writeBytesToArrayBuilder(dataBuilder, buffer);
+        buffer = ByteBuffer.allocate(2).putShort(convert16bitEndian((short) (BIT_DEPTH / 8))).array();
+        writeBytesToArrayBuilder(dataBuilder, buffer);
+        buffer = ByteBuffer.allocate(2).putShort(convert16bitEndian(BIT_DEPTH)).array();
+        writeBytesToArrayBuilder(dataBuilder, buffer);
+        buffer = ByteBuffer.allocate(4).putInt(SUBCHUNK2ID).array();
+        writeBytesToArrayBuilder(dataBuilder, buffer);
+        buffer = ByteBuffer.allocate(4).putInt(convert32bitEndian(pcmData.length * BIT_DEPTH / 8)).array();
+        writeBytesToArrayBuilder(dataBuilder, buffer);
+        writePCMDataToArrayBuilder(dataBuilder, pcmData);
+        //Convert arrayBuilder to a primitive array of bytes
         byte data[] = new byte[dataBuilder.getSize()];
         for (int index = 0; index < data.length; index++)
             data[index] = dataBuilder.get(index);
@@ -52,6 +78,14 @@ public class WaveEncode {
     private static void writeBytesToArrayBuilder(ArrayBuilder<Byte> builder, byte... bytes) {
         for (byte b : bytes)
             builder.add(b);
+    }
+
+    private static void writePCMDataToArrayBuilder(ArrayBuilder<Byte> builder, short[] pcmData) {
+        byte buffer[];
+        for (short s : pcmData) {
+            buffer = ByteBuffer.allocate(2).putShort(s).array();
+            writeBytesToArrayBuilder(builder, buffer);
+        }
     }
 
     /**

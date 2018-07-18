@@ -1,6 +1,7 @@
 package com.dakkra.wavetableeditor;
 
 import java.io.File;
+import java.io.IOException;
 
 public class WaveTableEditor {
     public static void main(String[] args) {
@@ -8,6 +9,10 @@ public class WaveTableEditor {
         System.out.println("Exporting test sample...");
         WaveTable wt = new WaveTable();
         wt.generateSine();
-        TableExporter.export(wt, new File("sample.wav"));
+        try {
+            TableExporter.export(wt, new File("sample.wav"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
