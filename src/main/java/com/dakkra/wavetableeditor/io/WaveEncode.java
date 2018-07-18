@@ -1,4 +1,4 @@
-package com.dakkra.openwav;
+package com.dakkra.wavetableeditor.io;
 
 import com.dakkra.wavetableeditor.util.ArrayBuilder;
 

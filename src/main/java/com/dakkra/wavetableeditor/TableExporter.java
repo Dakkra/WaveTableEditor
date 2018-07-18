@@ -1,6 +1,6 @@
 package com.dakkra.wavetableeditor;
 
-import com.dakkra.openwav.WaveEncode;
+import com.dakkra.wavetableeditor.io.WaveEncode;
 
 import java.io.*;
 
