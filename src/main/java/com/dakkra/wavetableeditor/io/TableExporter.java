@@ -30,7 +30,6 @@ public class TableExporter {
         oStream.write(data);
         oStream.flush();
         oStream.close();
-        System.out.println("Wrote to " + destinationFile.getAbsolutePath());
     }
 
     /**

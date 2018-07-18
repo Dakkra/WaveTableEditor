@@ -15,7 +15,6 @@ public class ArrayBuilder<E> {
         SIZE = array.length;
         index = 0;
         this.array = array;
-        System.out.println("Size of array: " + SIZE);
     }
 
     /**
