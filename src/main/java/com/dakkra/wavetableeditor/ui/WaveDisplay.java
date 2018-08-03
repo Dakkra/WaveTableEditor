@@ -1,7 +1,7 @@
 package com.dakkra.wavetableeditor.ui;
 
-import com.dakkra.wavetableeditor.containers.WaveTable;
-import com.dakkra.wavetableeditor.containers.WaveTableListener;
+import com.dakkra.wavetableeditor.waveconcept.WaveTable;
+import com.dakkra.wavetableeditor.waveconcept.WaveTableListener;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
@@ -38,6 +38,11 @@ public class WaveDisplay extends Pane implements WaveTableListener {
         graphics.setFill(BACKGROUND_COLOR);
         graphics.fillRect(0, 0, backingCanvas.getWidth(), backingCanvas.getHeight());
         short[] samples = currentWaveTable.getSamples();
+        //Horizontal 0-line
+        graphics.setStroke(new Color(0.5, 0.5, 0.5, 1));
+        graphics.setLineWidth(2);
+        graphics.strokeLine(0, backingCanvas.getHeight() / 2, backingCanvas.getWidth(), backingCanvas.getHeight() / 2);
+        //Wave Shape line
         graphics.setStroke(LINE_COLOR);
         graphics.setLineWidth(1);
         for (int xIndex = 0; xIndex < samples.length; xIndex++) {
@@ -54,7 +59,7 @@ public class WaveDisplay extends Pane implements WaveTableListener {
     private void renderPoint(double x1, double y1, double x2, double y2) {
         //X values from 0-2043
         //Y values from Short.MIN to Short.MAX
-        double relX1 = (x1 / 2048) * backingCanvas.getWidth();
+        double relX1 = (x1 / WaveTable.SAMPLES_IN_WAVETABLE) * backingCanvas.getWidth();
         double relY1 = (Short.MAX_VALUE - y1) / (Short.MAX_VALUE - Short.MIN_VALUE) * backingCanvas.getHeight();
         double relX2 = (x2 / 2048) * backingCanvas.getWidth();
         double relY2 = (Short.MAX_VALUE - y2) / (Short.MAX_VALUE - Short.MIN_VALUE) * backingCanvas.getHeight();

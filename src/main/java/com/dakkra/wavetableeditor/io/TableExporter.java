@@ -1,6 +1,6 @@
 package com.dakkra.wavetableeditor.io;
 
-import com.dakkra.wavetableeditor.containers.WaveTable;
+import com.dakkra.wavetableeditor.waveconcept.WaveTable;
 
 import java.io.*;
 
@@ -19,7 +19,7 @@ public class TableExporter {
             destinationFile.createNewFile();
         OutputStream oStream = new FileOutputStream(destinationFile);
         short[] pcmData = waveTable.getSamples();
-        if (pcmData.length != 2048)
+        if (pcmData.length != WaveTable.SAMPLES_IN_WAVETABLE)
             throw new IOException("Invalid sample length");
         //Convert sample data from big endian to little endian
         for (int index = 0; index < pcmData.length; index++)

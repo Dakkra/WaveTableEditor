@@ -1,4 +1,4 @@
-package com.dakkra.wavetableeditor.containers;
+package com.dakkra.wavetableeditor.waveconcept;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -72,7 +72,7 @@ public class WaveTable {
      * <p>
      * If improper data is supplied, generates a single cycle sine wav
      */
-    public void generateFromHarmonics(int... harmonics) {
+    public void generateFromHarmonics(Harmonic... harmonics) {
         //Region check the array, if it has no length, generate a pure sine and quit the method
         if (!(harmonics.length > 0)) {
             generateSine(1f);
@@ -85,14 +85,16 @@ public class WaveTable {
         //Iterate through each harmonic and process it into the wave table
         for (int index = 0; index < harmonics.length; index++) {
             //Generate the harmonic data
-            harmonicGenerator.generateSine(harmonics[index]);
+            harmonicGenerator.generateSine(harmonics[index].getHarmonicValue());
             short[] harmonicSamples = harmonicGenerator.getSamples();
             //Add add new harmonic to wave table while handling amplitude as 1/x
             //Scaling CFR: https://www.desmos.com/calculator/79dlswrbfi
-            for (int sampleIndex = 0; sampleIndex < SAMPLES_IN_WAVETABLE; sampleIndex++)
-                samples[sampleIndex] += .5 * (harmonicSamples[sampleIndex] / (index + 1)) * (1 + (1 / (Math.pow(2, (harmonics.length - 1)))));
+            for (int sampleIndex = 0; sampleIndex < SAMPLES_IN_WAVETABLE; sampleIndex++) {
+//                samples[sampleIndex] += .5 * (harmonicSamples[sampleIndex] / (index + 1)) * (1 + (1 / (Math.pow(2, (harmonics.length - 1)))));
+                samples[sampleIndex] += .5 * (harmonicSamples[sampleIndex] * harmonics[index].getAmplitude()) * (1 + (1 / (Math.pow(2, (harmonics.length - 1)))));
+            }
             //If there is a faulty harmonic, generate a pure sine and quit the method
-            if (harmonics[index] < 1) {
+            if (harmonics[index].getHarmonicValue() < 1) {
                 generateSine(1f);
                 return;
             }
@@ -104,10 +106,10 @@ public class WaveTable {
      * Generates new sample data using random harmonics and using the harmonic generator
      */
     public void generateFromRandomHarmonics() {
-        int randSize = random.nextInt(1020) + 4;
-        int[] harmonics = new int[randSize];
+        int randSize = random.nextInt(9) + 1;
+        Harmonic[] harmonics = new Harmonic[randSize];
         for (int i = 0; i < randSize; i++)
-            harmonics[i] = random.nextInt(299) + 1;
+            harmonics[i] = new Harmonic(random.nextInt(64), random.nextFloat() / (i + 1));
         generateFromHarmonics(harmonics);
         //The above already notifies listeners
     }
@@ -128,6 +130,14 @@ public class WaveTable {
      */
     public short[] getSamples() {
         return samples;
+    }
+
+    /**
+     * Sets the samples in this WaveTable. Skips to set if input array is not of size 2048
+     */
+    public void setSamples(short[] samples) {
+        if (samples.length == SAMPLES_IN_WAVETABLE)
+            this.samples = samples;
     }
 
     /**

@@ -94,6 +94,9 @@ public class PrimaryUI extends Application {
      */
     private void exportAction(Stage stage) {
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Wave Files", ".wav", ".WAV", ".Wav"));
+        fileChooser.setInitialFileName("sample.wav");
+        fileChooser.setTitle("Export Sample");
         File destinationFile = fileChooser.showSaveDialog(stage);
         TableExporter.threadedExport(ApplicationData.getMasterWaveTable(), destinationFile);
     }

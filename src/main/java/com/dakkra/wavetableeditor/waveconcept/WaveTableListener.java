@@ -1,4 +1,4 @@
-package com.dakkra.wavetableeditor.containers;
+package com.dakkra.wavetableeditor.waveconcept;
 
 public interface WaveTableListener {
     public void update(WaveTable table);

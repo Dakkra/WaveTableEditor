@@ -1,7 +1,7 @@
 package com.dakkra.wavetableeditor;
 
-import com.dakkra.wavetableeditor.containers.WaveTable;
-import com.dakkra.wavetableeditor.containers.WaveTableListener;
+import com.dakkra.wavetableeditor.waveconcept.WaveTable;
+import com.dakkra.wavetableeditor.waveconcept.WaveTableListener;
 
 public class ApplicationData {
     private static WaveTable masterWaveTable;
