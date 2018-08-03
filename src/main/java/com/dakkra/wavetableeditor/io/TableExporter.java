@@ -1,6 +1,6 @@
 package com.dakkra.wavetableeditor.io;
 
-import com.dakkra.wavetableeditor.WaveTable;
+import com.dakkra.wavetableeditor.containers.WaveTable;
 
 import java.io.*;
 

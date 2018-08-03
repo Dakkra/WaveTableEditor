@@ -1,15 +1,19 @@
-package com.dakkra.wavetableeditor;
+package com.dakkra.wavetableeditor.containers;
+
+import java.util.ArrayList;
 
 public class WaveTable {
 
     public static final int SAMPLES_IN_WAVETABLE = 2048;
     private short samples[];
+    private ArrayList<WaveTableListener> listeners;
 
     /**
      * Creates a new wave table with 2048 16-bit samples
      */
     public WaveTable() {
         samples = new short[SAMPLES_IN_WAVETABLE];
+        listeners = new ArrayList<>();
         generateFlat();
     }
 
@@ -19,6 +23,7 @@ public class WaveTable {
     public void generateFlat() {
         for (int index = 0; index < SAMPLES_IN_WAVETABLE; index++)
             samples[index] = 0;
+        notifyListeners();
     }
 
     /**
@@ -32,6 +37,7 @@ public class WaveTable {
         short magnitude = Short.MAX_VALUE;
         for (int index = 0; index < SAMPLES_IN_WAVETABLE; index++)
             samples[index] = (short) Math.round((magnitude * Math.sin((index * Math.PI * numCycles) / 1024)));
+        notifyListeners();
     }
 
     /**
@@ -45,6 +51,7 @@ public class WaveTable {
         int flipIndex = Math.round(SAMPLES_IN_WAVETABLE * width);
         for (int index = 0; index < SAMPLES_IN_WAVETABLE; index++)
             samples[index] = index > flipIndex ? -Short.MAX_VALUE : Short.MAX_VALUE;
+        notifyListeners();
     }
 
     /**
@@ -54,6 +61,7 @@ public class WaveTable {
         short stepSize = (Short.MAX_VALUE - Short.MIN_VALUE) / SAMPLES_IN_WAVETABLE;
         for (int index = 0; index < SAMPLES_IN_WAVETABLE; index++)
             samples[index] = (short) ((index * stepSize) + Short.MIN_VALUE);
+        notifyListeners();
     }
 
     /**
@@ -86,6 +94,16 @@ public class WaveTable {
                 return;
             }
         }
+        notifyListeners();
+    }
+
+    /**
+     * Adds a WaveTable listener to this WaveTable
+     *
+     * @param listener listener to add
+     */
+    public void addWaveTableListener(WaveTableListener listener) {
+        listeners.add(listener);
     }
 
     /**
@@ -95,5 +113,13 @@ public class WaveTable {
      */
     public short[] getSamples() {
         return samples;
+    }
+
+    /**
+     * Calls the update function of all WaveTable listeners registered on this WaveTable
+     */
+    private void notifyListeners() {
+        for (WaveTableListener wl : listeners)
+            wl.update(this);
     }
 }
