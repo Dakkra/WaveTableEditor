@@ -1,6 +1,7 @@
 package com.dakkra.wavetableeditor.ui;
 
 import com.dakkra.wavetableeditor.ApplicationData;
+import com.dakkra.wavetableeditor.io.TableExporter;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -8,7 +9,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 public class PrimaryUI extends Application {
 
@@ -66,7 +70,7 @@ public class PrimaryUI extends Application {
         contentBorderPane.setBottom(contentFooter);
         contentFooter.setStyle("-fx-background-color: #224466; -fx-alignment: center-right; -fx-font-size: .5cm;");
         Button exportButton = new Button("EXPORT");
-        exportButton.setOnMouseClicked((e) -> System.out.println("EXPORT BUTTON HIT"));
+        exportButton.setOnMouseClicked((e) -> exportAction(primaryStage));
         contentFooter.getChildren().add(exportButton);
 
         //Footer
@@ -80,5 +84,14 @@ public class PrimaryUI extends Application {
         Scene scene = new Scene(mainLayout, 1280, 720);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    /**
+     * Actions to be be fired when the export button is actuated
+     */
+    private void exportAction(Stage stage) {
+        FileChooser fileChooser = new FileChooser();
+        File destinationFile = fileChooser.showSaveDialog(stage);
+        TableExporter.threadedExport(ApplicationData.getMasterWaveTable(), destinationFile);
     }
 }
