@@ -52,14 +52,17 @@ public class PrimaryUI extends Application {
         Button squareButton = new Button("Square");
         Button sawButton = new Button("Saw");
         Button flatButton = new Button("Flat");
+        Button randButton = new Button("Random");
         sinButton.setOnMouseClicked((event -> ApplicationData.getMasterWaveTable().generateSine(1f)));
         squareButton.setOnMouseClicked((event -> ApplicationData.getMasterWaveTable().generatePulse(.5f)));
         sawButton.setOnMouseClicked((event -> ApplicationData.getMasterWaveTable().generateSaw()));
         flatButton.setOnMouseClicked((event -> ApplicationData.getMasterWaveTable().generateFlat()));
+        randButton.setOnMouseClicked((event -> ApplicationData.getMasterWaveTable().generateFromRandomHarmonics()));
         contentMenu.getChildren().add(sinButton);
         contentMenu.getChildren().add(squareButton);
         contentMenu.getChildren().add(sawButton);
         contentMenu.getChildren().add(flatButton);
+        contentMenu.getChildren().add(randButton);
 
         //WaveDisplay
         contentBorderPane.setCenter(display);

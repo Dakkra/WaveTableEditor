@@ -1,12 +1,14 @@
 package com.dakkra.wavetableeditor.containers;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class WaveTable {
 
     public static final int SAMPLES_IN_WAVETABLE = 2048;
     private short samples[];
     private ArrayList<WaveTableListener> listeners;
+    private Random random;
 
     /**
      * Creates a new wave table with 2048 16-bit samples
@@ -14,6 +16,7 @@ public class WaveTable {
     public WaveTable() {
         samples = new short[SAMPLES_IN_WAVETABLE];
         listeners = new ArrayList<>();
+        random = new Random();
         generateFlat();
     }
 
@@ -95,6 +98,18 @@ public class WaveTable {
             }
         }
         notifyListeners();
+    }
+
+    /**
+     * Generates new sample data using random harmonics and using the harmonic generator
+     */
+    public void generateFromRandomHarmonics() {
+        int randSize = random.nextInt(1020) + 4;
+        int[] harmonics = new int[randSize];
+        for (int i = 0; i < randSize; i++)
+            harmonics[i] = random.nextInt(299) + 1;
+        generateFromHarmonics(harmonics);
+        //The above already notifies listeners
     }
 
     /**

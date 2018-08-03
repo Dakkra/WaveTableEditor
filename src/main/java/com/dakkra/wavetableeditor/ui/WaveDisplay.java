@@ -39,7 +39,7 @@ public class WaveDisplay extends Pane implements WaveTableListener {
         graphics.fillRect(0, 0, backingCanvas.getWidth(), backingCanvas.getHeight());
         short[] samples = currentWaveTable.getSamples();
         graphics.setStroke(LINE_COLOR);
-        graphics.setLineWidth(4);
+        graphics.setLineWidth(1);
         for (int xIndex = 0; xIndex < samples.length; xIndex++) {
             if (xIndex == 0)
                 renderPoint(xIndex, samples[xIndex], xIndex, samples[xIndex]);
