@@ -44,16 +44,42 @@ public class WaveTable {
             width = 0.5f;
         int flipIndex = Math.round(SAMPLES_IN_WAVETABLE * width);
         for (int index = 0; index < SAMPLES_IN_WAVETABLE; index++)
-            samples[index] = index > flipIndex ? Short.MIN_VALUE : Short.MAX_VALUE;
+            samples[index] = index > flipIndex ? -Short.MAX_VALUE : Short.MAX_VALUE;
     }
 
     /**
-     * Generates a ram-saw
+     * Generates a ramp-saw
      */
     public void generateSaw() {
         short stepSize = (Short.MAX_VALUE - Short.MIN_VALUE) / SAMPLES_IN_WAVETABLE;
         for (int index = 0; index < SAMPLES_IN_WAVETABLE; index++)
             samples[index] = (short) ((index * stepSize) + Short.MIN_VALUE);
+    }
+
+    /**
+     * Generates a single cycle based upon the supplied harmonics (multiplier of the fundamental)
+     */
+    public void generateFromHarmonics(int... harmonics) {
+        //Region check the array, if it has no length, generate a pure sine
+        if (!(harmonics.length > 0))
+            generateSine(1f);
+        //Create place holder wave table for generating harmonics
+        generateFlat();
+        WaveTable harmonicGenerator = new WaveTable();
+        for (int index = 0; index < harmonics.length; index++) {
+            harmonicGenerator.generateSine(harmonics[index]);
+            short[] harmonicSamples = harmonicGenerator.getSamples();
+            //Add new harmonic to this sample handling amplitude as 1/x
+            //CFR: https://www.desmos.com/calculator/79dlswrbfi
+            for (int sampleIndex = 0; sampleIndex < SAMPLES_IN_WAVETABLE; sampleIndex++)
+                samples[sampleIndex] += .5 * (harmonicSamples[sampleIndex] / (index + 1)) * (1 + (1 / (Math.pow(2, (harmonics.length - 1)))));
+
+            //If there is a faulty harmonic, generate a pure sine and quit
+            if (harmonics[index] < 1) {
+                generateSine(1f);
+                return;
+            }
+        }
     }
 
     /**
