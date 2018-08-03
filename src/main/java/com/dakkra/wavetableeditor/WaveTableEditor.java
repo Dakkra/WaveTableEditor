@@ -1,6 +1,7 @@
 package com.dakkra.wavetableeditor;
 
 import com.dakkra.wavetableeditor.io.TableExporter;
+import com.dakkra.wavetableeditor.ui.PrimaryUI;
 
 import java.io.File;
 
@@ -16,5 +17,7 @@ public class WaveTableEditor {
             arr[i - 1] = i;
         wt.generateFromHarmonics(arr);
         TableExporter.threadedExport(wt, new File("sample.wav"));
+        //Create the GUI instance
+        PrimaryUI.startUserInterface();
     }
 }
