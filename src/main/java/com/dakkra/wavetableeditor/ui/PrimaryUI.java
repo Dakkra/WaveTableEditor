@@ -98,6 +98,7 @@ public class PrimaryUI extends Application {
         fileChooser.setInitialFileName("sample.wav");
         fileChooser.setTitle("Export Sample");
         File destinationFile = fileChooser.showSaveDialog(stage);
-        TableExporter.threadedExport(ApplicationData.getMasterWaveTable(), destinationFile);
+        if (destinationFile != null)
+            TableExporter.threadedExport(ApplicationData.getMasterWaveTable(), destinationFile);
     }
 }
