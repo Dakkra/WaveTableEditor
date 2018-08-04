@@ -138,6 +138,7 @@ public class WaveTable {
     public void setSamples(short[] samples) {
         if (samples.length == SAMPLES_IN_WAVETABLE)
             this.samples = samples;
+        notifyListeners();
     }
 
     /**

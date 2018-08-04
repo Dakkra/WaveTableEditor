@@ -1,5 +1,7 @@
 package com.dakkra.wavetableeditor.ui.graphicaleditor;
 
+import com.dakkra.wavetableeditor.ApplicationData;
+import com.dakkra.wavetableeditor.waveconcept.WaveTable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
@@ -38,11 +40,17 @@ public class GraphicalEditor extends Stage {
         Button cancelButton = new Button("Cancel");
         cancelButton.setOnMouseClicked((e) -> cancelButtonAction());
         Button exportButton = new Button("Accept");
-        exportButton.setOnMouseClicked((e) -> System.out.println("ACCEPT HIT"));
+        exportButton.setOnMouseClicked((e) -> acceptButtonAction());
         contentFooter.getChildren().add(cancelButton);
         contentFooter.getChildren().add(exportButton);
 
         show();
+    }
+
+    private void acceptButtonAction() {
+        WaveTable wt = display.encode();
+        ApplicationData.getMasterWaveTable().setSamples(wt.getSamples());
+        hide();
     }
 
     private void cancelButtonAction() {

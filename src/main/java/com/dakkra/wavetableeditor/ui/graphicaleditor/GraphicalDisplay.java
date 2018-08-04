@@ -1,5 +1,6 @@
 package com.dakkra.wavetableeditor.ui.graphicaleditor;
 
+import com.dakkra.wavetableeditor.waveconcept.WaveTable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseButton;
@@ -12,14 +13,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class GraphicalDisplay extends Pane {
-    private final Paint BACKGROUND_COLOR = new Color(0.2, 0.2, 0.2, 1);
-    private final Paint LINE_COLOR = new Color(0, 0.7, 0.5, 1);
-    private final Paint EDGE_COLOR = new Color(.7, .7, .3, 1);
+    private static final Paint BACKGROUND_COLOR = new Color(0.2, 0.2, 0.2, 1);
+    private static final Paint LINE_COLOR = new Color(0, 0.7, 0.5, 1);
+    private static final Paint EDGE_COLOR = new Color(.7, .7, .3, 1);
+    private static final int NODE_RADIUS = 7;
 
     private Canvas backingCanvas;
     private GraphicsContext graphics;
-    private ArrayList<UIDCircle> circles;
-    private EdgeUIDCircle startCircle, endCircle;
+    private ArrayList<ScalarCircle> circles;
+    private EdgeScalarCircle startCircle, endCircle;
 
     public GraphicalDisplay() {
         this.backingCanvas = new Canvas();
@@ -27,14 +29,14 @@ public class GraphicalDisplay extends Pane {
         this.graphics = backingCanvas.getGraphicsContext2D();
         this.getChildren().add(backingCanvas);
         circles = new ArrayList<>();
-        startCircle = new EdgeUIDCircle(0, 0.5f);
-        endCircle = new EdgeUIDCircle(1, 0.5f);
+        startCircle = new EdgeScalarCircle(0, 0.5f);
+        endCircle = new EdgeScalarCircle(1, 0.5f);
         startCircle.setOnMouseDragged(event -> handleCircleDrag(event, startCircle));
         endCircle.setOnMouseDragged(event -> handleCircleDrag(event, endCircle));
         startCircle.setFill(EDGE_COLOR);
         endCircle.setFill(EDGE_COLOR);
-        startCircle.setRadius(10);
-        endCircle.setRadius(10);
+        startCircle.setRadius(NODE_RADIUS);
+        endCircle.setRadius(NODE_RADIUS);
         this.getChildren().addAll(startCircle, endCircle);
         render();
     }
@@ -48,11 +50,19 @@ public class GraphicalDisplay extends Pane {
         graphics.setLineWidth(2);
         graphics.strokeLine(0, backingCanvas.getHeight() / 2, backingCanvas.getWidth(), backingCanvas.getHeight() / 2);
 
+        //Vertical quarter lines
+        double canvasW = backingCanvas.getWidth();
+        double canvasH = backingCanvas.getHeight();
+        graphics.setLineWidth(1);
+        graphics.strokeLine(canvasW / 4, 0, canvasW / 4, canvasH);
+        graphics.strokeLine(canvasW / 2, 0, canvasW / 2, canvasH);
+        graphics.strokeLine(canvasW / 4 + canvasW / 2, 0, canvasW / 4 + canvasW / 2, canvasH);
+
         graphics.setStroke(LINE_COLOR);
         graphics.setLineWidth(2);
 
         //Render nodes
-        UIDCircle previousCircle = startCircle;
+        ScalarCircle previousCircle = startCircle;
         if (circles.size() > 0) {
             for (int i = 0; i < circles.size(); i++) {
                 graphics.strokeLine(previousCircle.getCenterX(), previousCircle.getCenterY(), circles.get(i).getCenterX(), circles.get(i).getCenterY());
@@ -60,6 +70,14 @@ public class GraphicalDisplay extends Pane {
             }
         }
         graphics.strokeLine(previousCircle.getCenterX(), previousCircle.getCenterY(), endCircle.getCenterX(), endCircle.getCenterY());
+    }
+
+    public WaveTable encode() {
+        ArrayList<ScalarCircle> nodes = new ArrayList<>();
+        nodes.add(startCircle);
+        nodes.addAll(circles);
+        nodes.add(endCircle);
+        return ScalarNodesToWaveTable.scalarNodesListToTable(nodes);
     }
 
     @Override
@@ -74,7 +92,7 @@ public class GraphicalDisplay extends Pane {
         backingCanvas.setWidth(w);
         backingCanvas.setHeight(h);
         //Adjust circles
-        for (UIDCircle c : circles) {
+        for (ScalarCircle c : circles) {
             c.setCenterX(c.getScalarX() * backingCanvas.getWidth());
             c.setCenterY(c.getScalarY() * backingCanvas.getHeight());
         }
@@ -93,10 +111,10 @@ public class GraphicalDisplay extends Pane {
     }
 
     private void addPoint(double x, double y) {
-        UIDCircle c = new UIDCircle();
+        ScalarCircle c = new ScalarCircle();
         c.setCenterX(x);
         c.setCenterY(y);
-        c.setRadius(10);
+        c.setRadius(NODE_RADIUS);
         c.setFill(LINE_COLOR);
         c.setOnMouseClicked((event -> handleCircleClick(event, c)));
         c.setOnMouseDragged((event -> handleCircleDrag(event, c)));
@@ -109,18 +127,22 @@ public class GraphicalDisplay extends Pane {
         this.getChildren().add(c);
     }
 
-    private void handleCircleClick(MouseEvent event, UIDCircle circle) {
+    private void handleCircleClick(MouseEvent event, ScalarCircle circle) {
         if (event.getButton().equals(MouseButton.SECONDARY)) {
             circles.remove(circle);
             getChildren().remove(circle);
         }
     }
 
-    private void handleCircleDrag(MouseEvent event, UIDCircle circle) {
+    private void handleCircleDrag(MouseEvent event, ScalarCircle circle) {
         if (event.getX() > 0 && event.getX() < backingCanvas.getWidth())
             circle.setCenterX(event.getX());
         if (event.getY() >= 0 && event.getY() <= backingCanvas.getHeight())
             circle.setCenterY(event.getY());
+        if (event.getY() < 0)
+            circle.setCenterY(1);
+        if (event.getY() > backingCanvas.getHeight() - 1)
+            circle.setCenterY(backingCanvas.getHeight());
         double scalarX = circle.getCenterX() / backingCanvas.getWidth();
         double scalarY = circle.getCenterY() / backingCanvas.getHeight();
         circle.setScalar(scalarX, scalarY);

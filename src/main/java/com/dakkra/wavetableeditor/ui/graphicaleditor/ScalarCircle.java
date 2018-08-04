@@ -2,15 +2,8 @@ package com.dakkra.wavetableeditor.ui.graphicaleditor;
 
 import javafx.scene.shape.Circle;
 
-import java.util.UUID;
-
-public class UIDCircle extends Circle implements Comparable<UIDCircle> {
-    private UUID uid = UUID.randomUUID();
+public class ScalarCircle extends Circle implements Comparable<ScalarCircle> {
     private double scalarX, scalarY;
-
-    public UUID getUid() {
-        return uid;
-    }
 
     public void setScalar(double scalarX, double scalarY) {
         this.scalarX = scalarX;
@@ -26,10 +19,10 @@ public class UIDCircle extends Circle implements Comparable<UIDCircle> {
     }
 
     @Override
-    public int compareTo(UIDCircle other) {
-        if (this.getCenterX() < other.getCenterX())
+    public int compareTo(ScalarCircle other) {
+        if (this.getScalarX() < other.getScalarX())
             return -1;
-        if (this.getCenterX() > other.getCenterX())
+        if (this.getScalarX() > other.getScalarX())
             return 1;
         return 0;
     }

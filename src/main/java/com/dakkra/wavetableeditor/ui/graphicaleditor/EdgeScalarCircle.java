@@ -1,11 +1,11 @@
 package com.dakkra.wavetableeditor.ui.graphicaleditor;
 
-public class EdgeUIDCircle extends UIDCircle {
+public class EdgeScalarCircle extends ScalarCircle {
 
     private final double fixedScalarX;
     private double scalarY;
 
-    public EdgeUIDCircle(double fixedScalarX, double scalarY) {
+    public EdgeScalarCircle(double fixedScalarX, double scalarY) {
         this.fixedScalarX = fixedScalarX;
         this.scalarY = scalarY;
     }
