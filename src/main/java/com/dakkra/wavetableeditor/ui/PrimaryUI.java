@@ -1,6 +1,7 @@
 package com.dakkra.wavetableeditor.ui;
 
 import com.dakkra.wavetableeditor.ApplicationData;
+import com.dakkra.wavetableeditor.io.AudioTest;
 import com.dakkra.wavetableeditor.io.TableExporter;
 import com.dakkra.wavetableeditor.ui.graphicaleditor.GraphicalEditor;
 import javafx.application.Application;
@@ -28,16 +29,16 @@ public class PrimaryUI extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Wave Table Editor");
-        primaryStage.setMinHeight(300);
+        primaryStage.setTitle("Wave Maker");
         primaryStage.setMinWidth(600);
+        primaryStage.setMinHeight(400);
         BorderPane mainLayout = new BorderPane();
 
         //Header
         HBox header = new HBox();
         mainLayout.setTop(header);
         header.setStyle("-fx-background-color: #336699; -fx-alignment: center; -fx-font-size: 1cm;");
-        Text headerLabel = new Text("Wave Table Editor");
+        Text headerLabel = new Text("Wave Maker");
         headerLabel.setFill(Color.WHITE);
         header.getChildren().add(headerLabel);
 
@@ -77,8 +78,10 @@ public class PrimaryUI extends Application {
         contentBorderPane.setBottom(contentFooter);
         contentFooter.setStyle("-fx-background-color: #224466; -fx-alignment: center-right; -fx-font-size: .5cm;");
         Button exportButton = new Button("EXPORT");
+        Button listenButton = new Button("LISTEN");
         exportButton.setOnMouseClicked((e) -> exportAction(primaryStage));
-        contentFooter.getChildren().add(exportButton);
+        listenButton.setOnMouseClicked(event -> AudioTest.threadedPlayback());
+        contentFooter.getChildren().addAll(listenButton, exportButton);
 
         //Footer
         HBox footer = new HBox();

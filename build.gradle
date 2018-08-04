@@ -9,6 +9,21 @@ version '1.0-SNAPSHOT'
 mainClassName = 'com.dakkra.wavetableeditor.WaveTableEditor'
 sourceCompatibility = 1.8
 
+def vendor = 'Chris Soderquist (http://dakkra.com)'
+
+jar {
+    manifest {
+        attributes 'Name': 'WaveMaker',
+                'Main-Class': mainClassName,
+                'Specification-Title': 'Single Cycle WaveForm generator',
+                'Specification-Vendor': vendor,
+                'Specification-Version': version,
+                'Implementation-Title': 'wavemaker',
+                'Implementation-Version': version,
+                'Implementation-Vendor': vendor
+    }
+}
+
 repositories {
     mavenCentral()
 }

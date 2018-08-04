@@ -16,8 +16,8 @@ public class GraphicalEditor extends Stage {
 
     public GraphicalEditor() {
         setTitle("Graphical Editor");
-        setMinHeight(300);
         setMinWidth(600);
+        setMinHeight(400);
         display = new GraphicalDisplay();
         BorderPane mainLayout = new BorderPane();
         Scene scene = new Scene(mainLayout, 1280, 720);
