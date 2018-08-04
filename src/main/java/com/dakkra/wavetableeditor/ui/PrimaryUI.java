@@ -28,7 +28,7 @@ public class PrimaryUI extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         primaryStage.setTitle("Wave Maker");
         primaryStage.setMinWidth(600);
         primaryStage.setMinHeight(400);
