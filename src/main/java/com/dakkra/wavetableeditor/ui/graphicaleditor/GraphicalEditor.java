@@ -29,7 +29,6 @@ public class GraphicalEditor extends Stage {
         header.getChildren().add(headerTitle);
         mainLayout.setTop(header);
 
-        //TODO fill this thing
         mainLayout.setCenter(display);
 
         //Export Footer
