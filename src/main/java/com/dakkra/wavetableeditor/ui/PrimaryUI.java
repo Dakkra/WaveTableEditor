@@ -1,7 +1,7 @@
 package com.dakkra.wavetableeditor.ui;
 
 import com.dakkra.wavetableeditor.ApplicationData;
-import com.dakkra.wavetableeditor.io.AudioTest;
+import com.dakkra.wavetableeditor.io.AudioEngine;
 import com.dakkra.wavetableeditor.io.TableExporter;
 import com.dakkra.wavetableeditor.ui.graphicaleditor.GraphicalEditor;
 import javafx.application.Application;
@@ -80,7 +80,7 @@ public class PrimaryUI extends Application {
         Button exportButton = new Button("EXPORT");
         Button listenButton = new Button("LISTEN");
         exportButton.setOnMouseClicked((e) -> exportAction(primaryStage));
-        listenButton.setOnMouseClicked(event -> AudioTest.threadedPlayback());
+        listenButton.setOnMouseClicked(event -> AudioEngine.threadedPlayback());
         contentFooter.getChildren().addAll(listenButton, exportButton);
 
         //Footer
