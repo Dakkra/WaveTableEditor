@@ -2,6 +2,7 @@ package com.dakkra.wavetableeditor.ui;
 
 import com.dakkra.wavetableeditor.ApplicationData;
 import com.dakkra.wavetableeditor.io.TableExporter;
+import com.dakkra.wavetableeditor.ui.graphicaleditor.GraphicalEditor;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -29,7 +30,7 @@ public class PrimaryUI extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Wave Table Editor");
         primaryStage.setMinHeight(300);
-        primaryStage.setMinWidth(500);
+        primaryStage.setMinWidth(600);
         BorderPane mainLayout = new BorderPane();
 
         //Header
@@ -53,16 +54,19 @@ public class PrimaryUI extends Application {
         Button sawButton = new Button("Saw");
         Button flatButton = new Button("Flat");
         Button randButton = new Button("Random");
+        Button graphButton = new Button("Graphical Editor");
         sinButton.setOnMouseClicked((event -> ApplicationData.getMasterWaveTable().generateSine(1f)));
         squareButton.setOnMouseClicked((event -> ApplicationData.getMasterWaveTable().generatePulse(.5f)));
         sawButton.setOnMouseClicked((event -> ApplicationData.getMasterWaveTable().generateSaw()));
         flatButton.setOnMouseClicked((event -> ApplicationData.getMasterWaveTable().generateFlat()));
         randButton.setOnMouseClicked((event -> ApplicationData.getMasterWaveTable().generateFromRandomHarmonics()));
+        graphButton.setOnMouseClicked((event -> new GraphicalEditor()));
         contentMenu.getChildren().add(sinButton);
         contentMenu.getChildren().add(squareButton);
         contentMenu.getChildren().add(sawButton);
         contentMenu.getChildren().add(flatButton);
         contentMenu.getChildren().add(randButton);
+        contentMenu.getChildren().add(graphButton);
 
         //WaveDisplay
         contentBorderPane.setCenter(display);
