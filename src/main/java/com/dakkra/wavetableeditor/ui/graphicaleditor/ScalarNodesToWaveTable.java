@@ -7,6 +7,12 @@ import java.util.Collections;
 
 public class ScalarNodesToWaveTable {
 
+    /**
+     * Converts the list of scalar nodes into a WaveTable
+     *
+     * @param nodes list of scalar nodes
+     * @return WaveTable generated from list of nodes
+     */
     public static WaveTable scalarNodesListToTable(ArrayList<ScalarCircle> nodes) {
         Collections.sort(nodes);
         short[] samples = new short[WaveTable.SAMPLES_IN_WAVETABLE];

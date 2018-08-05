@@ -124,12 +124,12 @@ public class WaveTable {
     }
 
     /**
-     * Gets the samples from this wave table.
+     * Gets a clone of the samples from this wave table.
      *
      * @return array of 2048 16bit samples
      */
     public short[] getSamples() {
-        return samples;
+        return samples.clone();
     }
 
     /**

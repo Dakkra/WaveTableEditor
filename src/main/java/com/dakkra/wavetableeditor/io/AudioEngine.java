@@ -7,13 +7,18 @@ import java.util.Arrays;
 
 public class AudioEngine {
 
+    /**
+     * Plays the master WaveTable though the primary system audio device
+     *
+     * @throws LineUnavailableException
+     */
     public static void playbackTable() throws LineUnavailableException {
         AudioFormat af = new AudioFormat(44100, 16, 1, true, true);
         DataLine.Info info = new DataLine.Info(SourceDataLine.class, af);
         SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info);
 
         short[] higherPitchSample = new short[2048];
-        short[] samples = ApplicationData.getMasterWaveTable().getSamples().clone();
+        short[] samples = ApplicationData.getMasterWaveTable().getSamples();
 
         //Scale samples to not be loud 30% volume
         for (int i = 0; i < samples.length; i++)
@@ -34,6 +39,9 @@ public class AudioEngine {
         line.close();
     }
 
+    /**
+     * Calls playbackTable() in a separate thread;
+     */
     public static void threadedPlayback() {
         Thread thread = new Thread(() -> {
             try {
