@@ -7,15 +7,37 @@ import java.util.Arrays;
 
 public class AudioEngine {
 
+
+    private static AudioFormat audioFormat;
+    private static DataLine.Info datalineInfo;
+    private static SourceDataLine dataLine;
+
     /**
-     * Plays the master WaveTable though the primary system audio device
+     * Starts the audio engine and opens the audio line
      *
      * @throws LineUnavailableException
      */
-    public static void playbackTable() throws LineUnavailableException {
-        AudioFormat af = new AudioFormat(44100, 16, 1, true, true);
-        DataLine.Info info = new DataLine.Info(SourceDataLine.class, af);
-        SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info);
+    public static void start() throws LineUnavailableException {
+        audioFormat = new AudioFormat(44100, 16, 1, true, true);
+        datalineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
+        dataLine = (SourceDataLine) AudioSystem.getLine(datalineInfo);
+        dataLine.open(audioFormat);
+        dataLine.start();
+    }
+
+    /**
+     * Stops the audio engine and closes the audio line
+     */
+    public static void stop() {
+        dataLine.stop();
+        dataLine.drain();
+        dataLine.close();
+    }
+
+    /**
+     * Plays the master WaveTable though the primary system audio device
+     */
+    public static void playbackTable() {
 
         short[] higherPitchSample = new short[2048];
         short[] samples = ApplicationData.getMasterWaveTable().getSamples();
@@ -29,27 +51,19 @@ public class AudioEngine {
             higherPitchSample[i] = samples[(i * 8) % 2048];
 
         byte[] pcmData = Arrays.copyOfRange(WaveEncode.generateData(higherPitchSample), 44, 4140);
-        line.open(af);
-        line.start();
+        dataLine.start();
         for (int i = 0; i < 5; i++) {
-            line.write(pcmData, 0, pcmData.length);
+            dataLine.write(pcmData, 0, pcmData.length);
         }
-        line.drain();
-        line.stop();
-        line.close();
+        dataLine.drain();
+        dataLine.stop();
     }
 
     /**
      * Calls playbackTable() in a separate thread;
      */
     public static void threadedPlayback() {
-        Thread thread = new Thread(() -> {
-            try {
-                playbackTable();
-            } catch (LineUnavailableException e) {
-                e.printStackTrace();
-            }
-        });
+        Thread thread = new Thread(() -> playbackTable());
         thread.start();
     }
 

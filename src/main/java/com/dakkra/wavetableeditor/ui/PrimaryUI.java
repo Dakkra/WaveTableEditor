@@ -1,10 +1,12 @@
 package com.dakkra.wavetableeditor.ui;
 
 import com.dakkra.wavetableeditor.ApplicationData;
+import com.dakkra.wavetableeditor.WaveTableEditor;
 import com.dakkra.wavetableeditor.io.AudioEngine;
 import com.dakkra.wavetableeditor.io.TableExporter;
 import com.dakkra.wavetableeditor.ui.graphicaleditor.GraphicalEditor;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
@@ -93,6 +95,7 @@ public class PrimaryUI extends Application {
 
         Scene scene = new Scene(mainLayout, 1280, 720);
         primaryStage.setScene(scene);
+        primaryStage.setOnCloseRequest(event -> handleOnWindowClose());
         primaryStage.show();
     }
 
@@ -107,5 +110,13 @@ public class PrimaryUI extends Application {
         File destinationFile = fileChooser.showSaveDialog(stage);
         if (destinationFile != null)
             TableExporter.threadedExport(ApplicationData.getMasterWaveTable(), destinationFile);
+    }
+
+    /**
+     * Handles the window closing and properly shuts down the application
+     */
+    private void handleOnWindowClose() {
+        Platform.exit();
+        WaveTableEditor.shutdown();
     }
 }
