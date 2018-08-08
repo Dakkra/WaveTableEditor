@@ -24,21 +24,7 @@ public class GraphicalDisplay extends Pane {
     private EdgeScalarCircle startCircle, endCircle;
 
     public GraphicalDisplay() {
-        this.backingCanvas = new Canvas();
-        backingCanvas.setOnMouseClicked((event -> handleCanvasClick(event)));
-        this.graphics = backingCanvas.getGraphicsContext2D();
-        this.getChildren().add(backingCanvas);
-        circles = new ArrayList<>();
-        startCircle = new EdgeScalarCircle(0, 0.5f);
-        endCircle = new EdgeScalarCircle(1, 0.5f);
-        startCircle.setOnMouseDragged(event -> handleCircleDrag(event, startCircle));
-        endCircle.setOnMouseDragged(event -> handleCircleDrag(event, endCircle));
-        startCircle.setFill(EDGE_COLOR);
-        endCircle.setFill(EDGE_COLOR);
-        startCircle.setRadius(NODE_RADIUS);
-        endCircle.setRadius(NODE_RADIUS);
-        this.getChildren().addAll(startCircle, endCircle);
-        render();
+        reset();
     }
 
     public void render() {
@@ -78,6 +64,24 @@ public class GraphicalDisplay extends Pane {
         nodes.addAll(circles);
         nodes.add(endCircle);
         return ScalarNodesToWaveTable.scalarNodesListToTable(nodes);
+    }
+
+    public void reset() {
+        this.backingCanvas = new Canvas();
+        backingCanvas.setOnMouseClicked((event -> handleCanvasClick(event)));
+        this.graphics = backingCanvas.getGraphicsContext2D();
+        this.getChildren().add(backingCanvas);
+        circles = new ArrayList<>();
+        startCircle = new EdgeScalarCircle(0, 0.5f);
+        endCircle = new EdgeScalarCircle(1, 0.5f);
+        startCircle.setOnMouseDragged(event -> handleCircleDrag(event, startCircle));
+        endCircle.setOnMouseDragged(event -> handleCircleDrag(event, endCircle));
+        startCircle.setFill(EDGE_COLOR);
+        endCircle.setFill(EDGE_COLOR);
+        startCircle.setRadius(NODE_RADIUS);
+        endCircle.setRadius(NODE_RADIUS);
+        this.getChildren().addAll(startCircle, endCircle);
+        render();
     }
 
     @Override

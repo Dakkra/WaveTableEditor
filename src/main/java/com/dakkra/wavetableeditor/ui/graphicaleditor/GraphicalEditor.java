@@ -37,14 +37,17 @@ public class GraphicalEditor extends Stage {
         HBox contentFooter = new HBox();
         mainLayout.setBottom(contentFooter);
         contentFooter.setStyle("-fx-background-color: #224466; -fx-alignment: center-right; -fx-font-size: .5cm;");
+        Button resetButton = new Button("Reset");
+        resetButton.setOnMouseClicked(event -> resetButtonAction());
         Button cancelButton = new Button("Cancel");
         cancelButton.setOnMouseClicked((e) -> cancelButtonAction());
         Button exportButton = new Button("Accept");
         exportButton.setOnMouseClicked((e) -> acceptButtonAction());
-        contentFooter.getChildren().add(cancelButton);
-        contentFooter.getChildren().add(exportButton);
+        contentFooter.getChildren().addAll(resetButton, cancelButton, exportButton);
+    }
 
-        show();
+    private void resetButtonAction() {
+        display.reset();
     }
 
     private void acceptButtonAction() {

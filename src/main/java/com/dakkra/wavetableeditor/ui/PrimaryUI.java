@@ -21,6 +21,7 @@ import java.io.File;
 public class PrimaryUI extends Application {
 
     private WaveDisplay display = new WaveDisplay();
+    private GraphicalEditor graphicalEditor = new GraphicalEditor();
 
     /**
      * Launches this JavaFX GUI
@@ -63,7 +64,7 @@ public class PrimaryUI extends Application {
         sawButton.setOnMouseClicked((event -> ApplicationData.getMasterWaveTable().generateSaw()));
         flatButton.setOnMouseClicked((event -> ApplicationData.getMasterWaveTable().generateFlat()));
         randButton.setOnMouseClicked((event -> ApplicationData.getMasterWaveTable().generateFromRandomHarmonics()));
-        graphButton.setOnMouseClicked((event -> new GraphicalEditor()));
+        graphButton.setOnMouseClicked((event -> graphicalEditor.show()));
         contentMenu.getChildren().add(sinButton);
         contentMenu.getChildren().add(squareButton);
         contentMenu.getChildren().add(sawButton);
