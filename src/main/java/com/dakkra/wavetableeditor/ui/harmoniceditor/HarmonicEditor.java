@@ -1,38 +1,52 @@
-package com.dakkra.wavetableeditor.ui.graphicaleditor;
+package com.dakkra.wavetableeditor.ui.harmoniceditor;
 
-import com.dakkra.wavetableeditor.ApplicationData;
 import com.dakkra.wavetableeditor.ui.PrimaryUI;
+import com.dakkra.wavetableeditor.ui.WaveDisplay;
 import com.dakkra.wavetableeditor.waveconcept.WaveTable;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class GraphicalEditor extends Stage {
+public class HarmonicEditor extends Stage {
 
-    private GraphicalDisplay display;
+    private WaveTable localWavetable;
+    private WaveDisplay localDisplay;
+    private HarmonicPane harmonicPane;
 
-    public GraphicalEditor() {
-        setTitle("Graphical Editor");
+    public HarmonicEditor() {
+        localWavetable = new WaveTable();
+        localDisplay = new WaveDisplay();
+        harmonicPane = new HarmonicPane();
+        localWavetable.addWaveTableListener(localDisplay);
+        setTitle("Harmonic Editor");
         setMinWidth(PrimaryUI.MINIMUM_WIDTH);
         setMinHeight(PrimaryUI.MINIMUM_HEIGHT);
-        display = new GraphicalDisplay();
         BorderPane mainLayout = new BorderPane();
-        Scene scene = new Scene(mainLayout, PrimaryUI.DEFAULT_WIDTH, PrimaryUI.DEFAULT_HEIGHT);
-        setScene(scene);
 
         //Header
         HBox header = new HBox();
         header.setStyle("-fx-background-color: #336699; -fx-alignment: center; -fx-font-size: 1cm;");
-        Text headerTitle = new Text("Graphical Editor");
+        Text headerTitle = new Text("Harmonic Editor");
         headerTitle.setFill(Color.WHITE);
         header.getChildren().add(headerTitle);
         mainLayout.setTop(header);
 
-        mainLayout.setCenter(display);
+        //Center
+        GridPane grid = new GridPane();
+        ColumnConstraints constraints = new ColumnConstraints();
+        RowConstraints rowConstraints = new RowConstraints();
+        rowConstraints.setPercentHeight(100);
+        constraints.setPercentWidth(50);
+        grid.setGridLinesVisible(true);
+        grid.getColumnConstraints().addAll(constraints, constraints);
+        grid.getRowConstraints().addAll(rowConstraints);
+        grid.add(harmonicPane, 0, 0);
+        grid.add(localDisplay, 1, 0);
+        mainLayout.setCenter(grid);
 
         //Export Footer
         HBox contentFooter = new HBox();
@@ -45,19 +59,20 @@ public class GraphicalEditor extends Stage {
         Button exportButton = new Button("Accept");
         exportButton.setOnMouseClicked((e) -> acceptButtonAction());
         contentFooter.getChildren().addAll(resetButton, cancelButton, exportButton);
-    }
 
-    private void resetButtonAction() {
-        display.reset();
+        Scene scene = new Scene(mainLayout, PrimaryUI.DEFAULT_WIDTH, PrimaryUI.DEFAULT_HEIGHT);
+        setScene(scene);
     }
 
     private void acceptButtonAction() {
-        WaveTable wt = display.encode();
-        ApplicationData.getMasterWaveTable().setSamples(wt.getSamples());
-        hide();
+        //TODO this stub
     }
 
     private void cancelButtonAction() {
-        hide();
+        //TODO this stub
+    }
+
+    private void resetButtonAction() {
+        //TODO this stub
     }
 }

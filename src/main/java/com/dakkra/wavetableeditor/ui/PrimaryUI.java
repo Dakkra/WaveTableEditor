@@ -5,6 +5,7 @@ import com.dakkra.wavetableeditor.WaveTableEditor;
 import com.dakkra.wavetableeditor.io.AudioEngine;
 import com.dakkra.wavetableeditor.io.TableExporter;
 import com.dakkra.wavetableeditor.ui.graphicaleditor.GraphicalEditor;
+import com.dakkra.wavetableeditor.ui.harmoniceditor.HarmonicEditor;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -20,8 +21,16 @@ import java.io.File;
 
 public class PrimaryUI extends Application {
 
+    public static final int MINIMUM_WIDTH = 700;
+    public static final int MINIMUM_HEIGHT = 400;
+    public static final int DEFAULT_WIDTH = 1280;
+    public static final int DEFAULT_HEIGHT = 720;
+
+    private static final String APPLICATION_NAME = "WaveWorx";
+
     private WaveDisplay display = new WaveDisplay();
     private GraphicalEditor graphicalEditor = new GraphicalEditor();
+    private HarmonicEditor harmonicEditor = new HarmonicEditor();
 
     /**
      * Launches this JavaFX GUI
@@ -32,16 +41,16 @@ public class PrimaryUI extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Wave Maker");
-        primaryStage.setMinWidth(600);
-        primaryStage.setMinHeight(400);
+        primaryStage.setTitle(APPLICATION_NAME);
+        primaryStage.setMinWidth(MINIMUM_WIDTH);
+        primaryStage.setMinHeight(MINIMUM_HEIGHT);
         BorderPane mainLayout = new BorderPane();
 
         //Header
         HBox header = new HBox();
         mainLayout.setTop(header);
         header.setStyle("-fx-background-color: #336699; -fx-alignment: center; -fx-font-size: 1cm;");
-        Text headerLabel = new Text("Wave Maker");
+        Text headerLabel = new Text(APPLICATION_NAME);
         headerLabel.setFill(Color.WHITE);
         header.getChildren().add(headerLabel);
 
@@ -59,18 +68,15 @@ public class PrimaryUI extends Application {
         Button flatButton = new Button("Flat");
         Button randButton = new Button("Random");
         Button graphButton = new Button("Graphical Editor");
+        Button harmonicButton = new Button("Harmonic Editor");
         sinButton.setOnMouseClicked((event -> ApplicationData.getMasterWaveTable().generateSine(1f)));
         squareButton.setOnMouseClicked((event -> ApplicationData.getMasterWaveTable().generatePulse(.5f)));
         sawButton.setOnMouseClicked((event -> ApplicationData.getMasterWaveTable().generateSaw()));
         flatButton.setOnMouseClicked((event -> ApplicationData.getMasterWaveTable().generateFlat()));
         randButton.setOnMouseClicked((event -> ApplicationData.getMasterWaveTable().generateFromRandomHarmonics()));
         graphButton.setOnMouseClicked((event -> graphicalEditor.show()));
-        contentMenu.getChildren().add(sinButton);
-        contentMenu.getChildren().add(squareButton);
-        contentMenu.getChildren().add(sawButton);
-        contentMenu.getChildren().add(flatButton);
-        contentMenu.getChildren().add(randButton);
-        contentMenu.getChildren().add(graphButton);
+        harmonicButton.setOnMouseClicked(event -> harmonicEditor.show());
+        contentMenu.getChildren().addAll(sinButton, squareButton, sawButton, flatButton, randButton, graphButton, harmonicButton);
 
         //WaveDisplay
         contentBorderPane.setCenter(display);
@@ -94,7 +100,7 @@ public class PrimaryUI extends Application {
         footerText.setFill(Color.WHITE);
         footer.getChildren().add(footerText);
 
-        Scene scene = new Scene(mainLayout, 1280, 720);
+        Scene scene = new Scene(mainLayout, DEFAULT_WIDTH, DEFAULT_HEIGHT);
         primaryStage.setScene(scene);
         primaryStage.setOnCloseRequest(event -> handleOnWindowClose());
         primaryStage.show();
