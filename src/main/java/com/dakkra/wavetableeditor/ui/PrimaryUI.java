@@ -104,6 +104,7 @@ public class PrimaryUI extends Application {
         primaryStage.setScene(scene);
         primaryStage.setOnCloseRequest(event -> handleOnWindowClose());
         primaryStage.show();
+        primaryStage.toFront();
     }
 
     /**

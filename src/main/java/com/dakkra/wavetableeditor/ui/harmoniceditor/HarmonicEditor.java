@@ -69,7 +69,7 @@ public class HarmonicEditor extends Stage {
     }
 
     private void cancelButtonAction() {
-        //TODO this stub
+        hide();
     }
 
     private void resetButtonAction() {
