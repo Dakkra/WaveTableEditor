@@ -14,7 +14,6 @@ public class HarmonicPane extends BorderPane {
         FlowPane mainLayout = new FlowPane();
         scrollPane.setContent(mainLayout);
         scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
         this.setCenter(scrollPane);
 
         for (int i = 0; i < 1000; i++)

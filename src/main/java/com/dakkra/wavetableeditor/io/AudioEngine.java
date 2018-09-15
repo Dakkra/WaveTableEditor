@@ -51,7 +51,7 @@ public class AudioEngine {
 
             //Resample into new array for a higher frequency tone
             for (int i = 0; i < higherPitchSample.length; i++)
-                higherPitchSample[i] = samples[(i * 8) % 2048];
+                higherPitchSample[i] = samples[(i * 9) % 2048];
 
             byte[] pcmData = Arrays.copyOfRange(WaveEncode.generateData(higherPitchSample), 44, 4140);
             dataLine.start();
@@ -68,7 +68,7 @@ public class AudioEngine {
      * Calls playbackTable() in a separate thread;
      */
     public static void threadedPlayback() {
-        Thread thread = new Thread(() -> playbackTable());
+        Thread thread = new Thread(AudioEngine::playbackTable);
         thread.start();
     }
 
