@@ -1,5 +1,6 @@
 package com.dakkra.wavetableeditor.ui.graphicaleditor;
 
+import com.dakkra.wavetableeditor.ui.PrimaryUI;
 import com.dakkra.wavetableeditor.waveconcept.WaveTable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -13,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class GraphicalDisplay extends Pane {
-    private static final Paint BACKGROUND_COLOR = new Color(0.2, 0.2, 0.2, 1);
-    private static final Paint LINE_COLOR = new Color(0, 0.7, 0.5, 1);
-    private static final Paint EDGE_COLOR = new Color(.7, .7, .3, 1);
+    private static final Paint BACKGROUND_COLOR = PrimaryUI.BACKGROUND_COLOR;
+    private static final Paint LINE_COLOR = PrimaryUI.LINE_COLOR;
+    private static final Paint EDGE_COLOR = PrimaryUI.EDGE_COLOR;
     private static final int NODE_RADIUS = 7;
 
     private Canvas backingCanvas;
@@ -68,7 +69,7 @@ public class GraphicalDisplay extends Pane {
 
     public void reset() {
         this.backingCanvas = new Canvas();
-        backingCanvas.setOnMouseClicked((event -> handleCanvasClick(event)));
+        backingCanvas.setOnMouseClicked((this::handleCanvasClick));
         this.graphics = backingCanvas.getGraphicsContext2D();
         this.getChildren().add(backingCanvas);
         circles = new ArrayList<>();

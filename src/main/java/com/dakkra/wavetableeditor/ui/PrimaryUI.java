@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -25,6 +26,10 @@ public class PrimaryUI extends Application {
     public static final int MINIMUM_HEIGHT = 400;
     public static final int DEFAULT_WIDTH = 1280;
     public static final int DEFAULT_HEIGHT = 720;
+
+    public static final Paint BACKGROUND_COLOR = new Color(0.1, 0.1, 0.1, 1);
+    public static final Paint LINE_COLOR = new Color(0, 0.7, 0.5, 1);
+    public static final Paint EDGE_COLOR = new Color(.7, .7, .3, 1);
 
     private static final String APPLICATION_NAME = "WaveWorx";
 
@@ -96,7 +101,7 @@ public class PrimaryUI extends Application {
         HBox footer = new HBox();
         mainLayout.setBottom(footer);
         footer.setStyle("-fx-background-color: #336699; -fx-alignment: center; -fx-font-size: .5cm;");
-        Text footerText = new Text("Copyright (c) 2018 Christopher Soderquist");
+        Text footerText = new Text("Copyright (c) 2019 Christopher Soderquist");
         footerText.setFill(Color.WHITE);
         footer.getChildren().add(footerText);
 

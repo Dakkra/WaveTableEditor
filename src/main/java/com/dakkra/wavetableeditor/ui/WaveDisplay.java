@@ -14,8 +14,8 @@ public class WaveDisplay extends Pane implements WaveTableListener {
     private WaveTable currentWaveTable;
     private GraphicsContext graphics;
 
-    private final Paint BACKGROUND_COLOR = new Color(0.2, 0.2, 0.2, 1);
-    private final Paint LINE_COLOR = new Color(0, 0.7, 0.5, 1);
+    private final Paint BACKGROUND_COLOR = PrimaryUI.BACKGROUND_COLOR;
+    private final Paint LINE_COLOR = PrimaryUI.LINE_COLOR;
 
     /**
      * Creates a new WaveDisplay Container
