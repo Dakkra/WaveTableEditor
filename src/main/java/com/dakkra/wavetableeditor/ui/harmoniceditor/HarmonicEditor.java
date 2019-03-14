@@ -18,13 +18,12 @@ import java.util.HashMap;
 public class HarmonicEditor extends Stage {
 
     private WaveTable localWavetable;
-    private WaveDisplay localDisplay;
     private HarmonicPane harmonicPane;
     private HashMap<Integer, Harmonic> harmonicChanges;
 
     public HarmonicEditor() {
         localWavetable = new WaveTable();
-        localDisplay = new WaveDisplay();
+        WaveDisplay localDisplay = new WaveDisplay();
         harmonicPane = new HarmonicPane(this::sliderListener);
         harmonicChanges = new HashMap<>();
         localWavetable.addWaveTableListener(localDisplay);
@@ -70,6 +69,9 @@ public class HarmonicEditor extends Stage {
         setScene(scene);
     }
 
+    /**
+     * Updates/generates the waveform based upon the harmonic sliders
+     */
     private void updateWaveform() {
         Collection<Harmonic> harmonics = harmonicChanges.values();
         Harmonic[] harmArr = new Harmonic[harmonics.size()];
@@ -81,6 +83,9 @@ public class HarmonicEditor extends Stage {
         localWavetable.generateFromHarmonics(harmArr);
     }
 
+    /**
+     * Slider listener for harmonics
+     */
     private void sliderListener(Harmonic harmonic) {
         harmonicChanges.put(harmonic.getHarmonicValue(), harmonic);
         updateWaveform();
@@ -97,24 +102,5 @@ public class HarmonicEditor extends Stage {
 
     private void resetButtonAction() {
         harmonicPane.reset();
-    }
-
-    private class HarmonicChange {
-
-        private Harmonic harm;
-        private Number value;
-
-        public HarmonicChange(Harmonic harm, Number value) {
-            this.harm = harm;
-            this.value = value;
-        }
-
-        public Harmonic getHarm() {
-            return harm;
-        }
-
-        public Number getValue() {
-            return value;
-        }
     }
 }

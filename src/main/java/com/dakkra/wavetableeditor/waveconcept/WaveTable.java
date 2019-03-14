@@ -6,7 +6,7 @@ import java.util.Random;
 public class WaveTable {
 
     public static final int SAMPLES_IN_WAVETABLE = 2048;
-    private short samples[];
+    private short[] samples;
     private ArrayList<WaveTableListener> listeners;
     private Random random;
 
@@ -83,18 +83,18 @@ public class WaveTable {
         //Create place holder wave table for generating harmonics
         WaveTable harmonicGenerator = new WaveTable();
         //Iterate through each harmonic and process it into the wave table
-        for (int index = 0; index < harmonics.length; index++) {
+        for (Harmonic harmonic : harmonics) {
             //Generate the harmonic data
-            harmonicGenerator.generateSine(harmonics[index].getHarmonicValue());
+            harmonicGenerator.generateSine(harmonic.getHarmonicValue());
             short[] harmonicSamples = harmonicGenerator.getSamples();
             //Add add new harmonic to wave table while handling amplitude as 1/x
             //Scaling CFR: https://www.desmos.com/calculator/79dlswrbfi
             for (int sampleIndex = 0; sampleIndex < SAMPLES_IN_WAVETABLE; sampleIndex++) {
 //                samples[sampleIndex] += .5 * (harmonicSamples[sampleIndex] / (index + 1)) * (1 + (1 / (Math.pow(2, (harmonics.length - 1)))));
-                samples[sampleIndex] += .5 * (harmonicSamples[sampleIndex] * harmonics[index].getAmplitude()) * (1 + (1 / (Math.pow(2, (harmonics.length - 1)))));
+                samples[sampleIndex] += .5 * (harmonicSamples[sampleIndex] * harmonic.getAmplitude()) * (1 + (1 / (Math.pow(2, (harmonics.length - 1)))));
             }
             //If there is a faulty harmonic, generate a pure sine and quit the method
-            if (harmonics[index].getHarmonicValue() < 1) {
+            if (harmonic.getHarmonicValue() < 1) {
                 generateSine(1f);
                 return;
             }

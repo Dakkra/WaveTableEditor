@@ -14,7 +14,7 @@ public class HarmonicPane extends BorderPane {
 
     private ArrayList<HarmonicSlider> sliders;
 
-    public HarmonicPane(HarmonicSliderListener listener) {
+    HarmonicPane(HarmonicSliderListener listener) {
         this.setStyle("-fx-background-color: #000;");
         sliders = new ArrayList<>();
         ScrollPane scrollPane = new ScrollPane();
@@ -29,7 +29,10 @@ public class HarmonicPane extends BorderPane {
         }
     }
 
-    public void reset() {
+    /**
+     * Resets all slider to 0
+     */
+    void reset() {
         for(HarmonicSlider hs : sliders)
             hs.reset();
     }

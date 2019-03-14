@@ -16,7 +16,7 @@ public class HarmonicSlider extends BorderPane {
     private Harmonic harmonic;
     private Slider slider;
 
-    public HarmonicSlider(Harmonic harmonic, HarmonicSliderListener listener) {
+    HarmonicSlider(Harmonic harmonic, HarmonicSliderListener listener) {
         this.listener = listener;
         this.harmonic = harmonic;
         Slider vSlide = new Slider();
@@ -29,10 +29,16 @@ public class HarmonicSlider extends BorderPane {
         this.slider = vSlide;
     }
 
-    public void reset() {
+    /**
+     * Resets this slider to 0
+     */
+    void reset() {
         slider.setValue(0);
     }
 
+    /**
+     * Change handler for the slider
+     */
     private void changed(ObservableValue<? extends  Number> observableValue, Number oldValue, Number newValue) {
         listener.update(new Harmonic(this.harmonic.getHarmonicValue(), newValue.floatValue()/100f));
     }
