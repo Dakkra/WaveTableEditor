@@ -87,7 +87,10 @@ public class HarmonicEditor extends Stage {
      * Slider listener for harmonics
      */
     private void sliderListener(Harmonic harmonic) {
-        harmonicChanges.put(harmonic.getHarmonicValue(), harmonic);
+        if (harmonic.getAmplitude() > 0)
+            harmonicChanges.put(harmonic.getHarmonicValue(), harmonic);
+        else
+            harmonicChanges.remove(harmonic.getHarmonicValue());
         updateWaveform();
     }
 

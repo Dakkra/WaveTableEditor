@@ -1,10 +1,7 @@
 package com.dakkra.wavetableeditor.ui.harmoniceditor;
 
 import com.dakkra.wavetableeditor.waveconcept.Harmonic;
-import javafx.geometry.Orientation;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 

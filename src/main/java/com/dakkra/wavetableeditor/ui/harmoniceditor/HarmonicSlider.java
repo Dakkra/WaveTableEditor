@@ -1,7 +1,6 @@
 package com.dakkra.wavetableeditor.ui.harmoniceditor;
 
 import com.dakkra.wavetableeditor.waveconcept.Harmonic;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
