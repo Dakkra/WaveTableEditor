@@ -1,9 +1,10 @@
 package com.dakkra.wavetableeditor.ui.harmoniceditor;
 
+import com.dakkra.wavetableeditor.ApplicationData;
 import com.dakkra.wavetableeditor.ui.PrimaryUI;
 import com.dakkra.wavetableeditor.ui.WaveDisplay;
+import com.dakkra.wavetableeditor.waveconcept.Harmonic;
 import com.dakkra.wavetableeditor.waveconcept.WaveTable;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
@@ -11,16 +12,21 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.util.Collection;
+import java.util.HashMap;
+
 public class HarmonicEditor extends Stage {
 
     private WaveTable localWavetable;
     private WaveDisplay localDisplay;
     private HarmonicPane harmonicPane;
+    private HashMap<Integer, Harmonic> harmonicChanges;
 
     public HarmonicEditor() {
         localWavetable = new WaveTable();
         localDisplay = new WaveDisplay();
-        harmonicPane = new HarmonicPane();
+        harmonicPane = new HarmonicPane(this::sliderListener);
+        harmonicChanges = new HashMap<>();
         localWavetable.addWaveTableListener(localDisplay);
         setTitle("Harmonic Editor");
         setMinWidth(PrimaryUI.MINIMUM_WIDTH);
@@ -64,8 +70,25 @@ public class HarmonicEditor extends Stage {
         setScene(scene);
     }
 
+    private void updateWaveform() {
+        Collection<Harmonic> harmonics = harmonicChanges.values();
+        Harmonic[] harmArr = new Harmonic[harmonics.size()];
+        //This is slow as hell, need to fix
+        int counter = 0;
+        for (Harmonic h : harmonics) {
+            harmArr[counter++] = h;
+        }
+        localWavetable.generateFromHarmonics(harmArr);
+    }
+
+    private void sliderListener(Harmonic harmonic) {
+        harmonicChanges.put(harmonic.getHarmonicValue(), harmonic);
+        updateWaveform();
+    }
+
     private void acceptButtonAction() {
-        //TODO this stub
+        ApplicationData.getMasterWaveTable().setSamples(localWavetable.getSamples());
+        hide();
     }
 
     private void cancelButtonAction() {
@@ -73,6 +96,25 @@ public class HarmonicEditor extends Stage {
     }
 
     private void resetButtonAction() {
-        //TODO this stub
+        harmonicPane.reset();
+    }
+
+    private class HarmonicChange {
+
+        private Harmonic harm;
+        private Number value;
+
+        public HarmonicChange(Harmonic harm, Number value) {
+            this.harm = harm;
+            this.value = value;
+        }
+
+        public Harmonic getHarm() {
+            return harm;
+        }
+
+        public Number getValue() {
+            return value;
+        }
     }
 }
